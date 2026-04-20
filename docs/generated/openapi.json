@@ -1,0 +1,1568 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GoldScope API",
+    "summary": "Gold price intelligence API with analytics and alerts.",
+    "description": "GoldScope API provides historical gold price data, analytics endpoints, JWT authentication, and user-managed price alerts.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Health Check Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register",
+        "operationId": "register_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/prices": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "List Gold Prices",
+        "operationId": "list_gold_prices_gold_prices_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 5000,
+              "minimum": 0,
+              "default": 120,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoldPriceListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/prices/latest": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Latest Gold Price",
+        "operationId": "latest_gold_price_gold_prices_latest_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoldLatestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/summary": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Summary",
+        "operationId": "gold_summary_gold_analytics_summary_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/returns": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Returns",
+        "operationId": "gold_returns_gold_analytics_returns_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReturnsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/volatility": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Volatility",
+        "operationId": "gold_volatility_gold_analytics_volatility_get",
+        "parameters": [
+          {
+            "name": "window_points",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 120,
+              "minimum": 2,
+              "default": 12,
+              "title": "Window Points"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VolatilityResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/drawdown": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Drawdown",
+        "operationId": "gold_drawdown_gold_analytics_drawdown_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrawdownResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/anomalies": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Anomalies",
+        "operationId": "gold_anomalies_gold_analytics_anomalies_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Date"
+            }
+          },
+          {
+            "name": "threshold",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 5.0,
+              "minimum": 0.5,
+              "default": 1.5,
+              "title": "Threshold"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnomaliesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gold/analytics/regime": {
+      "get": {
+        "tags": [
+          "Gold Data"
+        ],
+        "summary": "Gold Regime",
+        "operationId": "gold_regime_gold_analytics_regime_get",
+        "parameters": [
+          {
+            "name": "short_window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 12,
+              "minimum": 2,
+              "default": 3,
+              "title": "Short Window"
+            }
+          },
+          {
+            "name": "long_window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 24,
+              "minimum": 3,
+              "default": 6,
+              "title": "Long Window"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegimeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alerts": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "List User Alerts",
+        "operationId": "list_user_alerts_alerts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertListResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Create Alert",
+        "operationId": "create_alert_alerts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/alerts/{alert_id}": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Get Alert",
+        "operationId": "get_alert_alerts__alert_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "alert_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Alert Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Update Alert",
+        "operationId": "update_alert_alerts__alert_id__patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "alert_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Alert Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlertUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Delete Alert",
+        "operationId": "delete_alert_alerts__alert_id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "alert_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Alert Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlertCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "condition_type": {
+            "type": "string",
+            "enum": [
+              "above",
+              "below"
+            ],
+            "title": "Condition Type"
+          },
+          "threshold_value": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Threshold Value"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "condition_type",
+          "threshold_value"
+        ],
+        "title": "AlertCreate"
+      },
+      "AlertListResponse": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlertRead"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count",
+          "items"
+        ],
+        "title": "AlertListResponse"
+      },
+      "AlertRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "condition_type": {
+            "type": "string",
+            "title": "Condition Type"
+          },
+          "threshold_value": {
+            "type": "number",
+            "title": "Threshold Value"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "name",
+          "condition_type",
+          "threshold_value",
+          "notes",
+          "active",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AlertRead"
+      },
+      "AlertUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "condition_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "above",
+                  "below"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition Type"
+          },
+          "threshold_value": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold Value"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active"
+          }
+        },
+        "type": "object",
+        "title": "AlertUpdate"
+      },
+      "AnomaliesResponse": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "observation_frequency": {
+            "type": "string",
+            "title": "Observation Frequency"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AnomalyRead"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date",
+          "threshold",
+          "count",
+          "observation_frequency",
+          "items"
+        ],
+        "title": "AnomaliesResponse"
+      },
+      "AnomalyRead": {
+        "properties": {
+          "price_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Price Date"
+          },
+          "usd_oz": {
+            "type": "number",
+            "title": "Usd Oz"
+          },
+          "pct_change": {
+            "type": "number",
+            "title": "Pct Change"
+          },
+          "z_score": {
+            "type": "number",
+            "title": "Z Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "price_date",
+          "usd_oz",
+          "pct_change",
+          "z_score"
+        ],
+        "title": "AnomalyRead"
+      },
+      "DrawdownResponse": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "max_drawdown_pct": {
+            "type": "number",
+            "title": "Max Drawdown Pct"
+          },
+          "peak_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Peak Date"
+          },
+          "trough_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Trough Date"
+          },
+          "recovery_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovery Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date",
+          "max_drawdown_pct",
+          "peak_date",
+          "trough_date",
+          "recovery_date"
+        ],
+        "title": "DrawdownResponse"
+      },
+      "GoldLatestResponse": {
+        "properties": {
+          "item": {
+            "$ref": "#/components/schemas/GoldPriceRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item"
+        ],
+        "title": "GoldLatestResponse"
+      },
+      "GoldPriceListResponse": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GoldPriceRead"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count",
+          "start_date",
+          "end_date",
+          "items"
+        ],
+        "title": "GoldPriceListResponse"
+      },
+      "GoldPriceRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "price_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Price Date"
+          },
+          "usd_oz": {
+            "type": "number",
+            "title": "Usd Oz"
+          },
+          "gbp_oz": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gbp Oz"
+          },
+          "eur_oz": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eur Oz"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "price_date",
+          "usd_oz",
+          "gbp_oz",
+          "eur_oz",
+          "source_name"
+        ],
+        "title": "GoldPriceRead"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
+      "RegimeResponse": {
+        "properties": {
+          "as_of_date": {
+            "type": "string",
+            "format": "date",
+            "title": "As Of Date"
+          },
+          "short_window": {
+            "type": "integer",
+            "title": "Short Window"
+          },
+          "long_window": {
+            "type": "integer",
+            "title": "Long Window"
+          },
+          "short_moving_average": {
+            "type": "number",
+            "title": "Short Moving Average"
+          },
+          "long_moving_average": {
+            "type": "number",
+            "title": "Long Moving Average"
+          },
+          "regime": {
+            "type": "string",
+            "title": "Regime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of_date",
+          "short_window",
+          "long_window",
+          "short_moving_average",
+          "long_moving_average",
+          "regime"
+        ],
+        "title": "RegimeResponse"
+      },
+      "RegisterRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "RegisterRequest"
+      },
+      "ReturnMetric": {
+        "properties": {
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "lookback_days": {
+            "type": "integer",
+            "title": "Lookback Days"
+          },
+          "matched_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Matched Date"
+          },
+          "matched_price": {
+            "type": "number",
+            "title": "Matched Price"
+          },
+          "latest_price": {
+            "type": "number",
+            "title": "Latest Price"
+          },
+          "absolute_return": {
+            "type": "number",
+            "title": "Absolute Return"
+          },
+          "percent_return": {
+            "type": "number",
+            "title": "Percent Return"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period_label",
+          "lookback_days",
+          "matched_date",
+          "matched_price",
+          "latest_price",
+          "absolute_return",
+          "percent_return"
+        ],
+        "title": "ReturnMetric"
+      },
+      "ReturnsResponse": {
+        "properties": {
+          "as_of_date": {
+            "type": "string",
+            "format": "date",
+            "title": "As Of Date"
+          },
+          "observation_frequency": {
+            "type": "string",
+            "title": "Observation Frequency"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReturnMetric"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of_date",
+          "observation_frequency",
+          "items"
+        ],
+        "title": "ReturnsResponse"
+      },
+      "SummaryResponse": {
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "title": "End Date"
+          },
+          "observation_count": {
+            "type": "integer",
+            "title": "Observation Count"
+          },
+          "observation_frequency": {
+            "type": "string",
+            "title": "Observation Frequency"
+          },
+          "latest_price": {
+            "type": "number",
+            "title": "Latest Price"
+          },
+          "latest_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Latest Date"
+          },
+          "min_price": {
+            "type": "number",
+            "title": "Min Price"
+          },
+          "max_price": {
+            "type": "number",
+            "title": "Max Price"
+          },
+          "average_price": {
+            "type": "number",
+            "title": "Average Price"
+          },
+          "absolute_change": {
+            "type": "number",
+            "title": "Absolute Change"
+          },
+          "percent_change": {
+            "type": "number",
+            "title": "Percent Change"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date",
+          "observation_count",
+          "observation_frequency",
+          "latest_price",
+          "latest_date",
+          "min_price",
+          "max_price",
+          "average_price",
+          "absolute_change",
+          "percent_change"
+        ],
+        "title": "SummaryResponse"
+      },
+      "TokenResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_at",
+          "user"
+        ],
+        "title": "TokenResponse"
+      },
+      "UserRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "created_at"
+        ],
+        "title": "UserRead"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VolatilityResponse": {
+        "properties": {
+          "as_of_date": {
+            "type": "string",
+            "format": "date",
+            "title": "As Of Date"
+          },
+          "observation_frequency": {
+            "type": "string",
+            "title": "Observation Frequency"
+          },
+          "window_points": {
+            "type": "integer",
+            "title": "Window Points"
+          },
+          "annualized_volatility": {
+            "type": "number",
+            "title": "Annualized Volatility"
+          },
+          "return_count": {
+            "type": "integer",
+            "title": "Return Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of_date",
+          "observation_frequency",
+          "window_points",
+          "annualized_volatility",
+          "return_count"
+        ],
+        "title": "VolatilityResponse"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/auth/login"
+          }
+        }
+      }
+    }
+  }
+}
