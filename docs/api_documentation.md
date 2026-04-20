@@ -15,7 +15,9 @@ The API combines three ideas in one coursework submission:
 - Local development: `http://127.0.0.1:8000`
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
-- Public deployment: add the final Render URL here before submission
+- Public deployment: `https://goldscope-api.onrender.com`
+- Public Swagger UI: `https://goldscope-api.onrender.com/docs`
+- Public ReDoc: `https://goldscope-api.onrender.com/redoc`
 
 ## 3. Authentication
 

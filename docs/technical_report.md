@@ -78,7 +78,7 @@ This approach prioritises meaningful behaviour coverage over artificially large 
 
 ## 10. Deployment and Engineering Readiness
 
-The repository includes `render.yaml`, environment configuration, migration support, and scripts for generating documentation assets. Local execution is complete and fully reproducible. Public deployment has been prepared but still depends on the repository owner completing GitHub hosting and Render configuration.
+The repository includes `render.yaml`, environment configuration, migration support, and scripts for generating documentation assets. Local execution is complete and fully reproducible. Public deployment has also been completed on Render at `https://goldscope-api.onrender.com`, which allows the API to be demonstrated through a live Swagger interface and a public health endpoint.
 
 Even before public deployment, the project already reflects an engineering workflow rather than a single-file prototype. The repository includes source code, tests, seed data, OpenAPI export, PDF-ready documentation, and a presentation deck. This supports the submission requirements beyond the API implementation alone.
 
@@ -117,6 +117,8 @@ All generated material was manually reviewed, edited, and verified before being 
 The public repository and generated submission assets are available at the following locations:
 
 - GitHub repository: https://github.com/MDYAnonTokyo/goldscope-api
+- Public API base URL: https://goldscope-api.onrender.com
+- Public Swagger UI: https://goldscope-api.onrender.com/docs
 - API documentation PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/api_documentation.pdf
 - Technical report PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/technical_report.pdf
 - Presentation slides: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/goldscope_presentation.pptx

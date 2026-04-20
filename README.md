@@ -168,6 +168,13 @@ uv run python scripts/generate_visual_report.py
 
 The repository includes a Render deployment blueprint in [render.yaml](render.yaml).
 
+Public deployment:
+
+- Base URL: `https://goldscope-api.onrender.com`
+- Swagger UI: `https://goldscope-api.onrender.com/docs`
+- ReDoc: `https://goldscope-api.onrender.com/redoc`
+- Health check: `https://goldscope-api.onrender.com/health`
+
 Recommended Render Free stack for coursework:
 
 - Web service: Render Free Web Service
@@ -176,8 +183,8 @@ Recommended Render Free stack for coursework:
 Current status:
 
 - Local execution is complete
-- Deployment configuration is prepared
-- Public GitHub hosting and public Render deployment still need to be completed by the repository owner
+- Public GitHub hosting is complete
+- Public Render deployment is live at `https://goldscope-api.onrender.com`
 
 Render-specific notes:
 
