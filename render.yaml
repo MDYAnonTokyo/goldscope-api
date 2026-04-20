@@ -3,12 +3,13 @@ services:
     name: goldscope-api
     runtime: python
     plan: free
+    autoDeployTrigger: commit
     buildCommand: |
       pip install uv
-      uv sync --frozen
-    startCommand: |
-      uv run alembic upgrade head
-      uv run uvicorn goldscope.main:app --host 0.0.0.0 --port $PORT
+      uv sync --frozen --no-dev
+    preDeployCommand: uv run alembic upgrade head
+    startCommand: uv run uvicorn goldscope.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
       - key: ENVIRONMENT
         value: production
@@ -28,6 +29,8 @@ services:
         value: DataHub gold-prices snapshot (derived from WGC)
       - key: GOLD_PRICES_SOURCE_URL
         value: https://datahub.io/core/gold-prices
+      - key: PUBLIC_BASE_URL
+        sync: false
 databases:
   - name: goldscope-db
     plan: free

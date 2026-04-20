@@ -39,4 +39,5 @@ src/goldscope_api.egg-info/requires.txt
 src/goldscope_api.egg-info/top_level.txt
 tests/test_alerts.py
 tests/test_auth.py
+tests/test_config.py
 tests/test_gold.py

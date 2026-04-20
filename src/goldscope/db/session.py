@@ -12,7 +12,11 @@ def _engine_kwargs(database_url: str) -> dict:
             "connect_args": {"check_same_thread": False},
             "future": True,
         }
-    return {"future": True}
+    return {
+        "future": True,
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
 
 
 @lru_cache

@@ -9,6 +9,7 @@ Requires-Dist: email-validator>=2.2.0
 Requires-Dist: fastapi>=0.115.12
 Requires-Dist: httpx>=0.28.1
 Requires-Dist: passlib[bcrypt]>=1.7.4
+Requires-Dist: psycopg[binary]>=3.2.9
 Requires-Dist: pydantic-settings>=2.8.1
 Requires-Dist: python-jose[cryptography]>=3.4.0
 Requires-Dist: python-multipart>=0.0.20
@@ -19,74 +20,89 @@ Requires-Dist: uvicorn[standard]>=0.34.0
 
 # GoldScope API
 
-GoldScope API 是一个基于 FastAPI 的黄金价格情报服务，面向 XJCO3011《Web Services and Web Data》课程作业设计。项目提供历史金价查询、分析型接口、JWT 认证以及用户自定义价格提醒 CRUD，并包含测试、部署配置、API 文档、技术报告和演示材料生成脚本。
+GoldScope API is a FastAPI-based gold price intelligence service created for the University of Leeds module `XJCO3011 Web Services and Web Data`. The project combines historical gold price data, analytics endpoints, JWT authentication, and user-managed price alerts in a database-driven web API.
 
-## 项目亮点
+The coursework goal is not only to implement CRUD with a database, but also to demonstrate clear software engineering decisions, documentation quality, testing discipline, and readiness for oral presentation. This repository is structured to support all of those assessment areas.
 
-- 使用真实金价快照数据作为种子数据源
-- 通过 SQLite 本地开发，兼容 Render Postgres 公网部署
-- 提供认证、提醒管理和分析型 endpoint 的完整 API 设计
-- 支持自动生成 OpenAPI、API 文档 PDF、技术报告 PDF 与演示 PPTX
-- 按 coursework 评分标准补齐 README、错误处理、测试和交付物结构
+## Features
 
-## 技术栈
+- Historical gold price query endpoints backed by SQLAlchemy models
+- Analytics endpoints for summary statistics, returns, volatility, drawdown, anomaly detection, and market regime classification
+- JWT-based authentication with registration and login
+- Full CRUD for user-owned gold price alerts
+- OpenAPI schema and interactive Swagger UI
+- Automated tests with `pytest`
+- Generated submission assets including API documentation PDF, technical report PDF, presentation deck, and visual report
+
+## Tech Stack
 
 - FastAPI
 - SQLAlchemy 2.0
 - Alembic
 - Pydantic Settings
-- JWT Bearer Authentication
+- JWT authentication
+- SQLite for local development
+- Render Postgres for planned cloud deployment
 - pytest
 - reportlab
 - python-pptx
 
-## 目录结构
+## Repository Structure
 
 ```text
-src/goldscope/         FastAPI 应用代码
-alembic/               数据库迁移
-data/raw/              金价原始 CSV 快照
-docs/                  Markdown 文档与生成材料
-scripts/               数据下载、数据库初始化、交付物生成脚本
-tests/                 自动化测试
+src/goldscope/         Application package
+alembic/               Database migration configuration
+data/raw/              Gold price CSV snapshot used for local import
+docs/                  Markdown source files for documentation and report
+docs/generated/        Generated PDF, PPTX, OpenAPI, and visual assets
+scripts/               Utility scripts for bootstrap, export, and asset generation
+tests/                 Automated test suite
+render.yaml            Render deployment blueprint
 ```
 
-## 本地运行
+## Local Setup
 
-1. 复制环境变量模板：
+### Prerequisites
+
+- Python 3.11 or newer
+- `uv` installed locally
+
+### 1. Create the environment file
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-2. 安装依赖：
+### 2. Install dependencies
 
 ```powershell
 $env:UV_CACHE_DIR=(Resolve-Path .uv-cache)
 uv sync
 ```
 
-3. 初始化数据库与种子数据：
+### 3. Bootstrap the local database
 
 ```powershell
 uv run python scripts/bootstrap_db.py
 ```
 
-4. 启动服务：
+This creates the local SQLite database file `goldscope.db` and imports the bundled gold price dataset if the database is empty.
+
+### 4. Start the API server
 
 ```powershell
 uv run uvicorn goldscope.main:app --reload
 ```
 
-5. 访问地址：
+### 5. Open the local application
 
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - ReDoc: `http://127.0.0.1:8000/redoc`
-- Health: `http://127.0.0.1:8000/health`
+- Health check: `http://127.0.0.1:8000/health`
 
-## 环境变量
+## Environment Variables
 
-`.env.example` 中已经给出默认变量：
+The main settings provided in `.env.example` are:
 
 - `DATABASE_URL`
 - `SECRET_KEY`
@@ -97,17 +113,19 @@ uv run uvicorn goldscope.main:app --reload
 - `GOLD_PRICES_SOURCE_URL`
 - `PUBLIC_BASE_URL`
 
-## 数据源说明
+## Database Notes
 
-- 当前项目使用 `data/raw/gold_prices_monthly.csv`
-- 该数据快照下载自 `https://datahub.io/core/gold-prices`
-- 数据集说明中标注其黄金价格序列来源包含 World Gold Council 相关公开资料与公开商品价格整理
-- 在技术报告中应明确说明：当前实现选择“可复现、可离线导入”的快照方式，而不是高风险的实时商业 API
+- Local development uses SQLite through `goldscope.db`.
+- The included dataset is stored in [data/raw/gold_prices_monthly.csv](data/raw/gold_prices_monthly.csv).
+- The seed dataset is based on the public DataHub gold prices snapshot, referenced in `.env.example` as a derived public source.
+- The project includes Alembic configuration and an initial migration in [alembic/versions](alembic/versions).
+- The intended production deployment target is PostgreSQL on Render.
 
-## 主要接口
+## API Overview
 
-- `POST /auth/register`
-- `POST /auth/login`
+### Public endpoints
+
+- `GET /health`
 - `GET /gold/prices`
 - `GET /gold/prices/latest`
 - `GET /gold/analytics/summary`
@@ -116,73 +134,107 @@ uv run uvicorn goldscope.main:app --reload
 - `GET /gold/analytics/drawdown`
 - `GET /gold/analytics/anomalies`
 - `GET /gold/analytics/regime`
+
+### Authentication endpoints
+
+- `POST /auth/register`
+- `POST /auth/login`
+
+### Protected alert endpoints
+
 - `POST /alerts`
 - `GET /alerts`
 - `GET /alerts/{id}`
 - `PATCH /alerts/{id}`
 - `DELETE /alerts/{id}`
 
-## 测试
+## Testing
 
-运行测试：
+Run the automated test suite with:
 
 ```powershell
 $env:UV_CACHE_DIR=(Resolve-Path .uv-cache)
 uv run pytest
 ```
 
-## 交付材料
+At the time of local verification, the suite passed successfully with `12 passed`.
 
-Markdown 源文件：
+## Documentation and Submission Assets
 
-- [API 文档](docs/api_documentation.md)
-- [技术报告](docs/technical_report.md)
-- [GenAI 声明](docs/genai_declaration.md)
-- [演示提纲](docs/presentation_outline.md)
+### Markdown source files
 
-生成交付物：
+- [API documentation](docs/api_documentation.md)
+- [Technical report](docs/technical_report.md)
+- [GenAI declaration](docs/genai_declaration.md)
+- [Presentation outline](docs/presentation_outline.md)
+
+### Generated assets
+
+- [OpenAPI JSON](docs/generated/openapi.json)
+- [API documentation PDF](docs/generated/api_documentation.pdf)
+- [Technical report PDF](docs/generated/technical_report.pdf)
+- [Presentation deck](docs/generated/goldscope_presentation.pptx)
+- [Visual report](docs/generated/visual_report.html)
+
+### Regenerate submission assets
 
 ```powershell
 uv run python scripts/export_openapi.py
 uv run python scripts/generate_submission_assets.py
+uv run python scripts/generate_visual_report.py
 ```
 
-生成后的文件默认位于 `docs/generated/`：
+## Deployment
 
-- `openapi.json`
-- `api_documentation.pdf`
-- `technical_report.pdf`
-- `goldscope_presentation.pptx`
+The repository includes a Render deployment blueprint in [render.yaml](render.yaml).
 
-## 部署说明
+Recommended Render Free stack for coursework:
 
-项目已提供 Render Blueprint 配置：
+- Web service: Render Free Web Service
+- Database: Render Free Postgres
 
-- `render.yaml`
+Current status:
 
-建议部署流程：
+- Local execution is complete
+- Deployment configuration is prepared
+- Public GitHub hosting and public Render deployment still need to be completed by the repository owner
 
-1. 推送到公开 GitHub 仓库
-2. 在 Render 中选择 Blueprint 部署
-3. 创建免费 Web Service 与 Postgres
-4. 设置环境变量并执行 `alembic upgrade head`
+Render-specific notes:
 
-## 版本控制建议
+- The application is configured to use PostgreSQL on Render instead of SQLite.
+- `render.yaml` uses `preDeployCommand` to run `alembic upgrade head` before startup.
+- The app seeds gold price data automatically on first startup if the database is empty.
+- A PostgreSQL connection string from Render is normalized to a SQLAlchemy-compatible `postgresql+psycopg://` URL.
+- `healthCheckPath` is set to `/health`, which is a better fit for Render web service health checks.
+- Free Render Postgres is suitable for coursework demos, but it has time and storage limits in Render's free tier.
 
-为了贴合作业评分标准，建议至少保留以下提交节奏：
+## Submission Checklist
 
-1. 项目初始化与仓库建立
-2. FastAPI 骨架与配置
-3. 认证与数据库模型
-4. 金价数据导入
-5. 分析接口
-6. Alert CRUD
-7. 测试与错误处理
-8. 文档与报告
-9. 部署配置与演示材料
+Before final submission, make sure the following items are completed:
 
-## 当前限制
+- Push this repository to a public GitHub repository
+- Maintain visible commit history
+- Upload the generated PDF documentation files to GitHub
+- Add the public repository link, API documentation link, and slide link to the final report PDF
+- Attach exported GenAI conversation logs as supplementary material
+- Deploy the API publicly if you want to strengthen the project for higher mark bands
 
-- 当前未直接接入实时商业金价 API
-- 当前分析基于月度快照数据，强调可复现与稳定交付
-- Render 公网部署配置已准备，但需要你自己的 GitHub/Render 账号完成最终上线
+## Coursework Context
+
+This project was designed to exceed the minimum pass criteria by including:
+
+- a relational database model
+- full CRUD through authenticated alert management
+- more than four HTTP endpoints
+- structured JSON responses and industry-standard status codes
+- automated testing
+- technical documentation and presentation assets
+- a deployment path suitable for public demonstration
+
+## References
+
+- FastAPI documentation: https://fastapi.tiangolo.com/
+- SQLAlchemy documentation: https://docs.sqlalchemy.org/
+- Alembic documentation: https://alembic.sqlalchemy.org/
+- Render documentation: https://render.com/docs
+- DataHub gold prices dataset: https://datahub.io/core/gold-prices

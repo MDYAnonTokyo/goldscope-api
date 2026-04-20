@@ -168,16 +168,25 @@ uv run python scripts/generate_visual_report.py
 
 The repository includes a Render deployment blueprint in [render.yaml](render.yaml).
 
-Planned production stack:
+Recommended Render Free stack for coursework:
 
-- Web service: Render
-- Database: Render Postgres
+- Web service: Render Free Web Service
+- Database: Render Free Postgres
 
 Current status:
 
 - Local execution is complete
 - Deployment configuration is prepared
 - Public GitHub hosting and public Render deployment still need to be completed by the repository owner
+
+Render-specific notes:
+
+- The application is configured to use PostgreSQL on Render instead of SQLite.
+- `render.yaml` uses `preDeployCommand` to run `alembic upgrade head` before startup.
+- The app seeds gold price data automatically on first startup if the database is empty.
+- A PostgreSQL connection string from Render is normalized to a SQLAlchemy-compatible `postgresql+psycopg://` URL.
+- `healthCheckPath` is set to `/health`, which is a better fit for Render web service health checks.
+- Free Render Postgres is suitable for coursework demos, but it has time and storage limits in Render's free tier.
 
 ## Submission Checklist
 
