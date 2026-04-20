@@ -182,7 +182,7 @@ Current status:
 Render-specific notes:
 
 - The application is configured to use PostgreSQL on Render instead of SQLite.
-- `render.yaml` uses `preDeployCommand` to run `alembic upgrade head` before startup.
+- On Render Free, database migrations run at service startup because `preDeployCommand` is not available on the free web service tier.
 - The app seeds gold price data automatically on first startup if the database is empty.
 - A PostgreSQL connection string from Render is normalized to a SQLAlchemy-compatible `postgresql+psycopg://` URL.
 - `healthCheckPath` is set to `/health`, which is a better fit for Render web service health checks.
