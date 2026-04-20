@@ -1,32 +1,61 @@
 # GenAI Declaration
 
+## Coursework Context
+
+This module is a green-light assessment for Generative AI use. GenAI was used as a development support tool during the planning, implementation, testing, and documentation stages of this project. All final outputs were manually reviewed and edited before inclusion in the submission.
+
 ## Tools Used
 
 - Codex / GPT-style assistant for:
-  - solution planning
-  - API architecture brainstorming
-  - error handling strategy
+  - project planning
+  - API architecture discussion
+  - documentation drafting
   - testing scenario generation
-  - README / report drafting support
-- Additional tooling may be listed by the student if used outside this repository
+  - code scaffolding support
+  - refactoring and wording improvements
 
-## Purposes
+## Purposes of Use
 
-- 探索不同技术栈和部署方案
-- 生成初始代码骨架与重构建议
-- 帮助整理 API 文档与测试清单
-- 帮助撰写技术报告结构与演示提纲
+GenAI was used to support the following activities:
 
-## Human Review Statement
+- exploring possible project ideas and selecting the gold price intelligence theme
+- comparing technical choices such as FastAPI, SQLite, PostgreSQL, and JWT authentication
+- structuring the repository into routes, schemas, models, services, and scripts
+- drafting and refining documentation, including the README, API documentation, technical report, and presentation outline
+- generating and refining test scenarios for authentication, CRUD, analytics, and validation behavior
+- helping design a reproducible data import workflow for the bundled gold price dataset
 
-所有关键实现、配置、文档与测试均已由提交者人工检查。最终提交者对代码行为、设计取舍、报告内容和答辩回答负全部责任。
+## Human Review and Responsibility
 
-## Appendix Guidance
+All code, documentation, and generated submission materials were reviewed manually before being kept in the repository. The final submission reflects the student's own responsibility for:
 
-- 在 Minerva 提交时，将实际导出的对话日志附在技术报告附录中
-- 如果使用了多个 GenAI 工具，应分别说明工具名称、用途和使用阶段
-- 建议附上 2 到 4 段最能体现“高层次使用 AI” 的代表性对话记录，例如：
-  - 方案对比
-  - 架构权衡
-  - 数据导入策略
-  - 文档生成与答辩准备
+- understanding the codebase
+- verifying API behavior
+- checking generated content for accuracy
+- editing wording and structure where necessary
+- defending design decisions during the oral examination
+
+GenAI was used to improve productivity and support higher-level exploration, not to replace understanding or submit unverified output.
+
+## Examples of Verifiable Human Checks
+
+The following manual checks were carried out during development:
+
+- reviewing route behavior through Swagger UI and local endpoint testing
+- running the automated test suite with `pytest`
+- checking generated documentation files and PDFs for consistency
+- verifying that the project could start locally and bootstrap the SQLite database
+- revising generated English wording to match the actual implementation
+
+## Supplementary Conversation Logs
+
+Examples of exported conversation logs should be attached as supplementary material in the final Minerva submission. A suitable appendix should include a small selection of representative interactions, such as:
+
+- project planning and idea selection
+- architecture or stack discussion
+- debugging or testing assistance
+- documentation refinement
+
+## Repository Reference
+
+- GitHub repository: https://github.com/MDYAnonTokyo/goldscope-api

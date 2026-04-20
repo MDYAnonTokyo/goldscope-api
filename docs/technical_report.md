@@ -114,12 +114,15 @@ All generated material was manually reviewed, edited, and verified before being 
 
 ## 15. Submission Notes
 
-Before final submission, this report should be exported to PDF and updated with the real public links for:
+The public repository and generated submission assets are available at the following locations:
 
-- the GitHub repository
-- the API documentation PDF
-- the presentation slides
-- any supplementary GenAI conversation logs
+- GitHub repository: https://github.com/MDYAnonTokyo/goldscope-api
+- API documentation PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/api_documentation.pdf
+- Technical report PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/technical_report.pdf
+- Presentation slides: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/goldscope_presentation.pptx
+- Visual report: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/visual_report.html
+
+Supplementary exported GenAI conversation logs should still be attached separately in the final Minerva submission if they are not already hosted in the repository.
 
 ## References
 
