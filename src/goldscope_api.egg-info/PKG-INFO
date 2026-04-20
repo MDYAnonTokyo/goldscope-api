@@ -1,0 +1,188 @@
+Metadata-Version: 2.4
+Name: goldscope-api
+Version: 0.1.0
+Summary: GoldScope API: a FastAPI-based gold price intelligence service for coursework submission.
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: alembic>=1.14.1
+Requires-Dist: email-validator>=2.2.0
+Requires-Dist: fastapi>=0.115.12
+Requires-Dist: httpx>=0.28.1
+Requires-Dist: passlib[bcrypt]>=1.7.4
+Requires-Dist: pydantic-settings>=2.8.1
+Requires-Dist: python-jose[cryptography]>=3.4.0
+Requires-Dist: python-multipart>=0.0.20
+Requires-Dist: python-pptx>=1.0.2
+Requires-Dist: reportlab>=4.3.1
+Requires-Dist: sqlalchemy>=2.0.40
+Requires-Dist: uvicorn[standard]>=0.34.0
+
+# GoldScope API
+
+GoldScope API 是一个基于 FastAPI 的黄金价格情报服务，面向 XJCO3011《Web Services and Web Data》课程作业设计。项目提供历史金价查询、分析型接口、JWT 认证以及用户自定义价格提醒 CRUD，并包含测试、部署配置、API 文档、技术报告和演示材料生成脚本。
+
+## 项目亮点
+
+- 使用真实金价快照数据作为种子数据源
+- 通过 SQLite 本地开发，兼容 Render Postgres 公网部署
+- 提供认证、提醒管理和分析型 endpoint 的完整 API 设计
+- 支持自动生成 OpenAPI、API 文档 PDF、技术报告 PDF 与演示 PPTX
+- 按 coursework 评分标准补齐 README、错误处理、测试和交付物结构
+
+## 技术栈
+
+- FastAPI
+- SQLAlchemy 2.0
+- Alembic
+- Pydantic Settings
+- JWT Bearer Authentication
+- pytest
+- reportlab
+- python-pptx
+
+## 目录结构
+
+```text
+src/goldscope/         FastAPI 应用代码
+alembic/               数据库迁移
+data/raw/              金价原始 CSV 快照
+docs/                  Markdown 文档与生成材料
+scripts/               数据下载、数据库初始化、交付物生成脚本
+tests/                 自动化测试
+```
+
+## 本地运行
+
+1. 复制环境变量模板：
+
+```powershell
+Copy-Item .env.example .env
+```
+
+2. 安装依赖：
+
+```powershell
+$env:UV_CACHE_DIR=(Resolve-Path .uv-cache)
+uv sync
+```
+
+3. 初始化数据库与种子数据：
+
+```powershell
+uv run python scripts/bootstrap_db.py
+```
+
+4. 启动服务：
+
+```powershell
+uv run uvicorn goldscope.main:app --reload
+```
+
+5. 访问地址：
+
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
+- Health: `http://127.0.0.1:8000/health`
+
+## 环境变量
+
+`.env.example` 中已经给出默认变量：
+
+- `DATABASE_URL`
+- `SECRET_KEY`
+- `ACCESS_TOKEN_EXPIRE_MINUTES`
+- `TOKEN_ISSUER`
+- `TOKEN_AUDIENCE`
+- `GOLD_PRICES_SOURCE_NAME`
+- `GOLD_PRICES_SOURCE_URL`
+- `PUBLIC_BASE_URL`
+
+## 数据源说明
+
+- 当前项目使用 `data/raw/gold_prices_monthly.csv`
+- 该数据快照下载自 `https://datahub.io/core/gold-prices`
+- 数据集说明中标注其黄金价格序列来源包含 World Gold Council 相关公开资料与公开商品价格整理
+- 在技术报告中应明确说明：当前实现选择“可复现、可离线导入”的快照方式，而不是高风险的实时商业 API
+
+## 主要接口
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /gold/prices`
+- `GET /gold/prices/latest`
+- `GET /gold/analytics/summary`
+- `GET /gold/analytics/returns`
+- `GET /gold/analytics/volatility`
+- `GET /gold/analytics/drawdown`
+- `GET /gold/analytics/anomalies`
+- `GET /gold/analytics/regime`
+- `POST /alerts`
+- `GET /alerts`
+- `GET /alerts/{id}`
+- `PATCH /alerts/{id}`
+- `DELETE /alerts/{id}`
+
+## 测试
+
+运行测试：
+
+```powershell
+$env:UV_CACHE_DIR=(Resolve-Path .uv-cache)
+uv run pytest
+```
+
+## 交付材料
+
+Markdown 源文件：
+
+- [API 文档](docs/api_documentation.md)
+- [技术报告](docs/technical_report.md)
+- [GenAI 声明](docs/genai_declaration.md)
+- [演示提纲](docs/presentation_outline.md)
+
+生成交付物：
+
+```powershell
+uv run python scripts/export_openapi.py
+uv run python scripts/generate_submission_assets.py
+```
+
+生成后的文件默认位于 `docs/generated/`：
+
+- `openapi.json`
+- `api_documentation.pdf`
+- `technical_report.pdf`
+- `goldscope_presentation.pptx`
+
+## 部署说明
+
+项目已提供 Render Blueprint 配置：
+
+- `render.yaml`
+
+建议部署流程：
+
+1. 推送到公开 GitHub 仓库
+2. 在 Render 中选择 Blueprint 部署
+3. 创建免费 Web Service 与 Postgres
+4. 设置环境变量并执行 `alembic upgrade head`
+
+## 版本控制建议
+
+为了贴合作业评分标准，建议至少保留以下提交节奏：
+
+1. 项目初始化与仓库建立
+2. FastAPI 骨架与配置
+3. 认证与数据库模型
+4. 金价数据导入
+5. 分析接口
+6. Alert CRUD
+7. 测试与错误处理
+8. 文档与报告
+9. 部署配置与演示材料
+
+## 当前限制
+
+- 当前未直接接入实时商业金价 API
+- 当前分析基于月度快照数据，强调可复现与稳定交付
+- Render 公网部署配置已准备，但需要你自己的 GitHub/Render 账号完成最终上线

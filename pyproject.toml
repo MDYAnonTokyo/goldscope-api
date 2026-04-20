@@ -1,0 +1,44 @@
+[project]
+name = "goldscope-api"
+version = "0.1.0"
+description = "GoldScope API: a FastAPI-based gold price intelligence service for coursework submission."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "alembic>=1.14.1",
+  "email-validator>=2.2.0",
+  "fastapi>=0.115.12",
+  "httpx>=0.28.1",
+  "passlib[bcrypt]>=1.7.4",
+  "pydantic-settings>=2.8.1",
+  "python-jose[cryptography]>=3.4.0",
+  "python-multipart>=0.0.20",
+  "python-pptx>=1.0.2",
+  "reportlab>=4.3.1",
+  "sqlalchemy>=2.0.40",
+  "uvicorn[standard]>=0.34.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-cov>=6.1.1",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.uv]
+default-groups = ["dev"]

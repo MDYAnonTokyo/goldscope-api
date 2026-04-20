@@ -1,0 +1,1 @@
+"""GoldScope API package."""

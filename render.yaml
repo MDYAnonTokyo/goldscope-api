@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: goldscope-api
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install uv
+      uv sync --frozen
+    startCommand: |
+      uv run alembic upgrade head
+      uv run uvicorn goldscope.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: goldscope-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: TOKEN_ISSUER
+        value: goldscope-api
+      - key: TOKEN_AUDIENCE
+        value: goldscope-users
+      - key: GOLD_PRICES_SOURCE_NAME
+        value: DataHub gold-prices snapshot (derived from WGC)
+      - key: GOLD_PRICES_SOURCE_URL
+        value: https://datahub.io/core/gold-prices
+databases:
+  - name: goldscope-db
+    plan: free
+    databaseName: goldscope
+    user: goldscope
