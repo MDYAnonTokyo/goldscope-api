@@ -38,7 +38,7 @@ The current version does not ingest live commercial data, send real notification
 
 ## 7. Generative AI Use
 
-Generative AI was used as a development support tool for planning, design exploration, documentation drafting, test-scenario generation, and implementation support. All outputs were reviewed and edited manually before inclusion in the project. Final responsibility for the code, documentation, testing, and oral defence remains with the student. A representative exported conversation log is included as `docs/generated/genai_conversation_logs.pdf` and should be attached as supplementary material in the final Minerva submission.
+Generative AI was used as a development support tool for planning, design exploration, documentation drafting, test-scenario generation, and implementation support. All outputs were reviewed and edited manually before inclusion in the project. Final responsibility for the code, documentation, testing, and oral defence remains with the student. A representative exported conversation log is included as `docs/generated/genai_conversation_logs.pdf`, and the original shared conversation record is available at `https://chatgpt.com/share/69e72e13-3380-839e-a4c9-9106fd8a84f2`. The PDF should be attached as supplementary material in the final Minerva submission.
 
 ## 8. Submission Links
 
@@ -49,6 +49,7 @@ Generative AI was used as a development support tool for planning, design explor
 - Technical report PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/technical_report.pdf
 - Presentation slides: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/goldscope_presentation.pptx
 - GenAI conversation logs PDF: https://github.com/MDYAnonTokyo/goldscope-api/blob/main/docs/generated/genai_conversation_logs.pdf
+- Shared GenAI conversation link: https://chatgpt.com/share/69e72e13-3380-839e-a4c9-9106fd8a84f2
 
 ## References
 
