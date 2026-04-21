@@ -17,6 +17,28 @@ def test_register_and_login_success(client: TestClient) -> None:
     assert login_response.json()["token_type"] == "bearer"
 
 
+def test_oauth_form_login_success(client: TestClient) -> None:
+    client.post(
+        "/auth/register",
+        json={"email": "oauth@example.com", "password": "strongpass123"},
+    )
+
+    login_response = client.post(
+        "/auth/token",
+        data={"username": "oauth@example.com", "password": "strongpass123"},
+    )
+    assert login_response.status_code == 200
+    assert login_response.json()["token_type"] == "bearer"
+
+
+def test_openapi_uses_oauth_token_endpoint(client: TestClient) -> None:
+    openapi = client.get("/openapi.json")
+    assert openapi.status_code == 200
+
+    security_scheme = openapi.json()["components"]["securitySchemes"]["OAuth2PasswordBearer"]
+    assert security_scheme["flows"]["password"]["tokenUrl"] == "/auth/token"
+
+
 def test_duplicate_registration_returns_409(client: TestClient) -> None:
     payload = {"email": "duplicate@example.com", "password": "strongpass123"}
     client.post("/auth/register", json=payload)

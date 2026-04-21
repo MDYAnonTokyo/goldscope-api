@@ -11,7 +11,7 @@ from goldscope.core.security import decode_access_token
 from goldscope.db.session import get_db
 from goldscope.models.user import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 DbSession = Annotated[Session, Depends(get_db)]
 
